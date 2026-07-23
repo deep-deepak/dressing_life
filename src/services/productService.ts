@@ -1,69 +1,29 @@
 import type { Product, ProductFilters } from '@/types';
-import { PRODUCTS, CATEGORIES } from './mock/products.data';
-import { simulateDelay } from './simulateDelay';
-
-// Swap the body of each function for an `api.get(...)` call once the
-// product API is available — the signatures are already API-shaped.
+import { api } from './api';
 
 export async function getProducts(filters: ProductFilters = {}): Promise<Product[]> {
-  let results = [...PRODUCTS];
-
-  if (filters.category) {
-    results = results.filter((p) => p.category === filters.category);
-  }
-  if (filters.color) {
-    results = results.filter((p) => p.colors.some((c) => c.name === filters.color));
-  }
-  if (filters.size) {
-    results = results.filter((p) => p.sizes.includes(filters.size!));
-  }
-  if (filters.minPrice != null) {
-    results = results.filter((p) => p.price >= filters.minPrice!);
-  }
-  if (filters.maxPrice != null) {
-    results = results.filter((p) => p.price <= filters.maxPrice!);
-  }
-  if (filters.search) {
-    const q = filters.search.toLowerCase();
-    results = results.filter((p) => p.name.toLowerCase().includes(q));
-  }
-
-  switch (filters.sortBy) {
-    case 'price-asc':
-      results.sort((a, b) => a.price - b.price);
-      break;
-    case 'price-desc':
-      results.sort((a, b) => b.price - a.price);
-      break;
-    case 'rating':
-      results.sort((a, b) => b.rating - a.rating);
-      break;
-    case 'newest':
-      results.sort((a, b) => Number(b.isNew) - Number(a.isNew));
-      break;
-  }
-
-  return simulateDelay(results);
+  const { data } = await api.get<Product[]>('/products', { params: filters });
+  return data;
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
-  return simulateDelay(PRODUCTS.find((p) => p.slug === slug));
+  const { data } = await api.get<Product | null>(`/products/${slug}`);
+  return data ?? undefined;
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
-  const related = PRODUCTS.filter(
-    (p) => p.id !== product.id && p.category === product.category,
-  ).slice(0, limit);
-  return simulateDelay(related);
+  const { data } = await api.get<Product[]>(`/products/${product.id}/related`, { params: { limit } });
+  return data;
 }
 
 export async function getCategories(): Promise<string[]> {
-  return simulateDelay([...CATEGORIES]);
+  const { data } = await api.get<{ name: string }[]>('/categories');
+  return data.map((c) => c.name);
 }
 
 export async function getFeaturedProducts(limit = 4): Promise<Product[]> {
-  const featured = PRODUCTS.filter((p) => p.isBestSeller || p.isNew).slice(0, limit);
-  return simulateDelay(featured);
+  const { data } = await api.get<Product[]>('/products', { params: { featured: true, limit } });
+  return data;
 }
 
 export interface ProductPayload {
@@ -81,30 +41,15 @@ export interface ProductPayload {
 }
 
 export async function createProduct(payload: ProductPayload): Promise<Product> {
-  const newProduct: Product = {
-    id: `p-${crypto.randomUUID().slice(0, 8)}`,
-    images: [],
-    colors: [],
-    sizes: [],
-    rating: 0,
-    reviewCount: 0,
-    reviews: [],
-    tags: [],
-    ...payload,
-  };
-  PRODUCTS.unshift(newProduct);
-  return simulateDelay(newProduct);
+  const { data } = await api.post<Product>('/products', payload);
+  return data;
 }
 
 export async function updateProduct(id: string, payload: ProductPayload): Promise<Product> {
-  const index = PRODUCTS.findIndex((p) => p.id === id);
-  if (index === -1) throw new Error('Product not found.');
-  PRODUCTS[index] = { ...PRODUCTS[index], ...payload };
-  return simulateDelay(PRODUCTS[index]);
+  const { data } = await api.put<Product>(`/products/${id}`, payload);
+  return data;
 }
 
 export async function deleteProduct(id: string): Promise<void> {
-  const index = PRODUCTS.findIndex((p) => p.id === id);
-  if (index !== -1) PRODUCTS.splice(index, 1);
-  return simulateDelay(undefined);
+  await api.delete(`/products/${id}`);
 }

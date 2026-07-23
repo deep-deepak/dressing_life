@@ -1,0 +1,312 @@
+import { placeholderImage } from './placeholderImage.js';
+
+const shot = (label: string, background = '0a0a0a', foreground = 'ffffff') => placeholderImage({ label, background, foreground });
+const avatar = (label: string) => placeholderImage({ label, width: 200, height: 200, background: '1a1a1a' });
+const catShot = (label: string) => placeholderImage({ label, width: 400, height: 400 });
+const bannerShot = (label: string, background: string) => placeholderImage({ label, width: 1600, height: 600, background });
+const cover = (label: string) => placeholderImage({ label, width: 1200, height: 700, background: '1a1a1a' });
+
+export const SEED_PRODUCTS = [
+  {
+    code: 'p-001',
+    slug: 'onyx-graphic-tee',
+    name: 'Onyx Graphic Tee',
+    description: 'A heavyweight cotton tee with a bold monochrome print. Built for everyday wear with a relaxed, structured fit.',
+    price: 1299,
+    compareAtPrice: 1799,
+    images: [shot('ONYX GRAPHIC TEE — FRONT'), shot('ONYX GRAPHIC TEE — BACK', '1a1a1a')],
+    category: 'Graphic',
+    fit: 'Regular Fit',
+    fabric: '240 GSM Cotton',
+    colors: [{ name: 'Black', hex: '#0a0a0a' }, { name: 'Crimson', hex: '#7a0f0f' }],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    rating: 4.6,
+    reviewCount: 128,
+    isBestSeller: true,
+    stock: 42,
+    tags: ['graphic', 'streetwear'],
+  },
+  {
+    code: 'p-002',
+    slug: 'crimson-crest-tee',
+    name: 'Crimson Crest Tee',
+    description: 'Minimal crest embroidery on premium combed cotton. A statement piece that pairs with everything.',
+    price: 1499,
+    images: [shot('CRIMSON CREST TEE — FRONT', '7a0f0f'), shot('CRIMSON CREST TEE — BACK', '4a0909')],
+    category: 'Graphic',
+    fit: 'Relaxed Fit',
+    fabric: '220 GSM Combed Cotton',
+    colors: [{ name: 'Crimson', hex: '#7a0f0f' }, { name: 'Black', hex: '#0a0a0a' }],
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    rating: 4.8,
+    reviewCount: 96,
+    isNew: true,
+    stock: 30,
+    tags: ['graphic', 'new-arrival'],
+  },
+  {
+    code: 'p-003',
+    slug: 'essential-black-tee',
+    name: 'Essential Black Tee',
+    description: 'No logo, no noise — just a perfectly cut black tee in dense, breathable cotton for daily rotation.',
+    price: 899,
+    images: [shot('ESSENTIAL BLACK TEE — FRONT'), shot('ESSENTIAL BLACK TEE — BACK', '1a1a1a')],
+    category: 'Solid',
+    fit: 'Regular Fit',
+    fabric: '200 GSM Cotton',
+    colors: [{ name: 'Black', hex: '#0a0a0a' }],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    rating: 4.7,
+    reviewCount: 210,
+    isBestSeller: true,
+    stock: 60,
+    tags: ['solid', 'essential'],
+  },
+  {
+    code: 'p-004',
+    slug: 'urban-oversized-tee',
+    name: 'Urban Oversized Tee',
+    description: 'Drop-shoulder oversized silhouette with a boxy fit — built for layering and off-duty comfort.',
+    price: 1399,
+    compareAtPrice: 1699,
+    images: [shot('URBAN OVERSIZED TEE — FRONT', '2b2b2b'), shot('URBAN OVERSIZED TEE — BACK', '1a1a1a')],
+    category: 'Oversized',
+    fit: 'Oversized Fit',
+    fabric: '260 GSM Cotton Fleece',
+    colors: [{ name: 'Charcoal', hex: '#2b2b2b' }, { name: 'Off White', hex: '#f7f5f2' }],
+    sizes: ['S', 'M', 'L', 'XL'],
+    rating: 4.5,
+    reviewCount: 74,
+    stock: 25,
+    tags: ['oversized', 'streetwear'],
+  },
+  {
+    code: 'p-005',
+    slug: 'ivory-minimal-tee',
+    name: 'Ivory Minimal Tee',
+    description: 'Clean ivory tee with a subtle chest print — soft-washed for a lived-in feel from day one.',
+    price: 999,
+    images: [shot('IVORY MINIMAL TEE — FRONT', 'f7f5f2', '0a0a0a'), shot('IVORY MINIMAL TEE — BACK', 'f0f0f0', '0a0a0a')],
+    category: 'Solid',
+    fit: 'Regular Fit',
+    fabric: '210 GSM Cotton',
+    colors: [{ name: 'Ivory', hex: '#f7f5f2' }],
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    rating: 4.4,
+    reviewCount: 58,
+    isNew: true,
+    stock: 38,
+    tags: ['solid', 'new-arrival'],
+  },
+  {
+    code: 'p-006',
+    slug: 'red-line-henley',
+    name: 'Red Line Henley Tee',
+    description: 'Buttoned henley neckline with a tailored fit — a step up from the standard crew tee.',
+    price: 1599,
+    images: [shot('RED LINE HENLEY — FRONT', '7a0f0f'), shot('RED LINE HENLEY — BACK', '630c0c')],
+    category: 'Henley',
+    fit: 'Slim Fit',
+    fabric: '230 GSM Cotton Blend',
+    colors: [{ name: 'Crimson', hex: '#7a0f0f' }, { name: 'Black', hex: '#0a0a0a' }],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    rating: 4.3,
+    reviewCount: 41,
+    stock: 20,
+    tags: ['henley'],
+  },
+  {
+    code: 'p-007',
+    slug: 'full-sleeve-raider-tee',
+    name: 'Full Sleeve Raider Tee',
+    description: 'Long-sleeve tee with ribbed cuffs and a raised print — built for transitional weather.',
+    price: 1699,
+    compareAtPrice: 1999,
+    images: [shot('FULL SLEEVE RAIDER — FRONT', '1a1a1a'), shot('FULL SLEEVE RAIDER — BACK', '0a0a0a')],
+    category: 'Full Sleeve',
+    fit: 'Regular Fit',
+    fabric: '250 GSM Cotton',
+    colors: [{ name: 'Black', hex: '#0a0a0a' }, { name: 'Charcoal', hex: '#2b2b2b' }],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    rating: 4.6,
+    reviewCount: 33,
+    stock: 18,
+    tags: ['full-sleeve'],
+  },
+  {
+    code: 'p-008',
+    slug: 'scarlet-script-tee',
+    name: 'Scarlet Script Tee',
+    description: 'Hand-drawn script graphic across the chest, printed with cracked-ink texture on soft jersey.',
+    price: 1249,
+    images: [shot('SCARLET SCRIPT TEE — FRONT', '0a0a0a'), shot('SCARLET SCRIPT TEE — BACK', '1a1a1a')],
+    category: 'Graphic',
+    fit: 'Regular Fit',
+    fabric: '220 GSM Cotton',
+    colors: [{ name: 'Black', hex: '#0a0a0a' }, { name: 'Crimson', hex: '#7a0f0f' }],
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    rating: 4.5,
+    reviewCount: 87,
+    isNew: true,
+    stock: 45,
+    tags: ['graphic', 'new-arrival'],
+  },
+  {
+    code: 'p-009',
+    slug: 'charcoal-pocket-tee',
+    name: 'Charcoal Pocket Tee',
+    description: 'A classic pocket tee reworked in heavyweight charcoal cotton for a premium everyday staple.',
+    price: 1099,
+    images: [shot('CHARCOAL POCKET TEE — FRONT', '2b2b2b'), shot('CHARCOAL POCKET TEE — BACK', '1a1a1a')],
+    category: 'Solid',
+    fit: 'Regular Fit',
+    fabric: '230 GSM Cotton',
+    colors: [{ name: 'Charcoal', hex: '#2b2b2b' }],
+    sizes: ['S', 'M', 'L', 'XL'],
+    rating: 4.2,
+    reviewCount: 29,
+    stock: 33,
+    tags: ['solid'],
+  },
+];
+
+export const SEED_CATEGORIES = [
+  { name: 'Graphic', slug: 'graphic', image: catShot('GRAPHIC'), productCount: 3, status: 'active' },
+  { name: 'Solid', slug: 'solid', image: catShot('SOLID'), productCount: 3, status: 'active' },
+  { name: 'Oversized', slug: 'oversized', image: catShot('OVERSIZED'), productCount: 1, status: 'active' },
+  { name: 'Henley', slug: 'henley', image: catShot('HENLEY'), productCount: 1, status: 'active' },
+  { name: 'Full Sleeve', slug: 'full-sleeve', image: catShot('FULL SLEEVE'), productCount: 1, status: 'active' },
+  { name: 'Limited Edition', slug: 'limited-edition', image: catShot('LIMITED'), productCount: 0, status: 'inactive' },
+];
+
+export const SEED_STAFF = [
+  { firstName: 'Martin', lastName: 'Sequeira', email: 'admin@dressinglife.com', role: 'admin', status: 'active', avatarUrl: avatar('MS'), lastLogin: '2026-07-08' },
+  { firstName: 'Farah', lastName: 'Nadeem', email: 'farah.nadeem@dressinglife.com', role: 'manager', status: 'active', avatarUrl: avatar('FN'), lastLogin: '2026-07-07' },
+  { firstName: 'Devansh', lastName: 'Oberoi', email: 'devansh.oberoi@dressinglife.com', role: 'manager', status: 'active', avatarUrl: avatar('DO'), lastLogin: '2026-07-05' },
+  { firstName: 'Ishita', lastName: 'Bhalla', email: 'ishita.bhalla@dressinglife.com', role: 'support', status: 'active', avatarUrl: avatar('IB'), lastLogin: '2026-07-06' },
+  { firstName: 'Sameer', lastName: 'Chadha', email: 'sameer.chadha@dressinglife.com', role: 'support', status: 'inactive', avatarUrl: avatar('SC'), lastLogin: '2026-05-11' },
+];
+
+export const SEED_CUSTOMERS = [
+  { firstName: 'Aditya', lastName: 'Rao', email: 'aditya.rao@example.com', phone: '+91 98765 43210', avatarUrl: avatar('AR'), status: 'active' },
+  { firstName: 'Priya', lastName: 'Sharma', email: 'priya.sharma@example.com', phone: '+91 98123 45678', avatarUrl: avatar('PS'), status: 'active' },
+  { firstName: 'Rohan', lastName: 'Mehta', email: 'rohan.mehta@example.com', avatarUrl: avatar('RM'), status: 'active' },
+  { firstName: 'Sneha', lastName: 'Kapoor', email: 'sneha.kapoor@example.com', phone: '+91 99887 76655', avatarUrl: avatar('SK'), status: 'active' },
+  { firstName: 'Vikram', lastName: 'Singh', email: 'vikram.singh@example.com', avatarUrl: avatar('VS'), status: 'blocked' },
+  { firstName: 'Ananya', lastName: 'Iyer', email: 'ananya.iyer@example.com', phone: '+91 91234 56789', avatarUrl: avatar('AI'), status: 'active' },
+  { firstName: 'Karan', lastName: 'Malhotra', email: 'karan.malhotra@example.com', avatarUrl: avatar('KM'), status: 'active' },
+  { firstName: 'Neha', lastName: 'Joshi', email: 'neha.joshi@example.com', phone: '+91 90000 11122', avatarUrl: avatar('NJ'), status: 'active' },
+];
+
+export const SEED_ORDERS = [
+  { customerEmail: 'aditya.rao@example.com', customerName: 'Aditya Rao', placedAt: '2026-07-06', status: 'delivered', paymentStatus: 'paid', paymentMethod: 'UPI', shippingAddress: '221 Marine Lines, Mumbai, Maharashtra 400002', items: [{ code: 'p-001', size: 'L', color: 'Black', quantity: 2 }, { code: 'p-003', size: 'M', color: 'Black', quantity: 1 }] },
+  { customerEmail: 'priya.sharma@example.com', customerName: 'Priya Sharma', placedAt: '2026-07-07', status: 'shipped', paymentStatus: 'paid', paymentMethod: 'Card', shippingAddress: '14 Koramangala 5th Block, Bengaluru, Karnataka 560095', items: [{ code: 'p-004', size: 'XL', color: 'Charcoal', quantity: 1 }] },
+  { customerEmail: 'rohan.mehta@example.com', customerName: 'Rohan Mehta', placedAt: '2026-07-05', status: 'processing', paymentStatus: 'pending', paymentMethod: 'Cash on Delivery', shippingAddress: '9 Sector 21, Noida, Uttar Pradesh 201301', items: [{ code: 'p-002', size: 'S', color: 'Crimson', quantity: 1 }, { code: 'p-008', size: 'M', color: 'Black', quantity: 1 }] },
+  { customerEmail: 'sneha.kapoor@example.com', customerName: 'Sneha Kapoor', placedAt: '2026-07-04', status: 'delivered', paymentStatus: 'paid', paymentMethod: 'UPI', shippingAddress: '78 Salt Lake Sector V, Kolkata, West Bengal 700091', items: [{ code: 'p-005', size: 'M', color: 'Ivory', quantity: 3 }] },
+  { customerEmail: 'vikram.singh@example.com', customerName: 'Vikram Singh', placedAt: '2026-06-30', status: 'cancelled', paymentStatus: 'refunded', paymentMethod: 'Card', shippingAddress: '33 Ashok Nagar, Chennai, Tamil Nadu 600083', items: [{ code: 'p-006', size: 'L', color: 'Crimson', quantity: 1 }] },
+  { customerEmail: 'ananya.iyer@example.com', customerName: 'Ananya Iyer', placedAt: '2026-07-08', status: 'processing', paymentStatus: 'paid', paymentMethod: 'Card', shippingAddress: '5 Baner Road, Pune, Maharashtra 411045', items: [{ code: 'p-007', size: 'XL', color: 'Black', quantity: 1 }, { code: 'p-009', size: 'L', color: 'Charcoal', quantity: 2 }] },
+  { customerEmail: 'karan.malhotra@example.com', customerName: 'Karan Malhotra', placedAt: '2026-07-03', status: 'shipped', paymentStatus: 'paid', paymentMethod: 'UPI', shippingAddress: '61 Model Town, Ludhiana, Punjab 141002', items: [{ code: 'p-001', size: 'XL', color: 'Crimson', quantity: 1 }] },
+  { customerEmail: 'neha.joshi@example.com', customerName: 'Neha Joshi', placedAt: '2026-07-01', status: 'delivered', paymentStatus: 'paid', paymentMethod: 'Net Banking', shippingAddress: '17 Vastrapur, Ahmedabad, Gujarat 380015', items: [{ code: 'p-003', size: 'S', color: 'Black', quantity: 2 }, { code: 'p-005', size: 'M', color: 'Ivory', quantity: 1 }] },
+  { customerEmail: 'aditya.rao@example.com', customerName: 'Aditya Rao', placedAt: '2026-06-27', status: 'delivered', paymentStatus: 'paid', paymentMethod: 'UPI', shippingAddress: '221 Marine Lines, Mumbai, Maharashtra 400002', items: [{ code: 'p-008', size: 'L', color: 'Crimson', quantity: 1 }] },
+  { customerEmail: 'priya.sharma@example.com', customerName: 'Priya Sharma', placedAt: '2026-06-22', status: 'cancelled', paymentStatus: 'failed', paymentMethod: 'Card', shippingAddress: '14 Koramangala 5th Block, Bengaluru, Karnataka 560095', items: [{ code: 'p-002', size: 'M', color: 'Black', quantity: 1 }] },
+];
+
+export const SEED_COUPONS = [
+  { code: 'WELCOME10', type: 'percentage', value: 10, minOrderValue: 999, usageLimit: 500, usedCount: 312, startDate: '2026-01-01', endDate: '2026-12-31', status: 'active' },
+  { code: 'FLAT200', type: 'fixed', value: 200, minOrderValue: 1500, usageLimit: 300, usedCount: 187, startDate: '2026-04-01', endDate: '2026-08-31', status: 'active' },
+  { code: 'MONSOON25', type: 'percentage', value: 25, minOrderValue: 2000, usageLimit: 200, usedCount: 44, startDate: '2026-07-01', endDate: '2026-07-31', status: 'active' },
+  { code: 'SUMMER15', type: 'percentage', value: 15, usageLimit: 400, usedCount: 400, startDate: '2026-04-01', endDate: '2026-06-30', status: 'expired' },
+  { code: 'FESTIVE500', type: 'fixed', value: 500, minOrderValue: 3000, usageLimit: 150, usedCount: 0, startDate: '2026-10-01', endDate: '2026-11-15', status: 'scheduled' },
+  { code: 'TESTCODE', type: 'fixed', value: 100, usageLimit: 50, usedCount: 3, startDate: '2026-05-01', endDate: '2026-05-31', status: 'disabled' },
+];
+
+export const SEED_REVIEWS = [
+  { productCode: 'p-001', author: 'Aditya Rao', rating: 5, comment: 'Fabric quality is excellent, fits true to size. Will buy again.', date: '2026-07-06', status: 'approved' },
+  { productCode: 'p-004', author: 'Priya Sharma', rating: 4, comment: 'Love the oversized fit, though the color was slightly different from the photos.', date: '2026-07-07', status: 'pending' },
+  { productCode: 'p-002', author: 'Rohan Mehta', rating: 5, comment: 'Best graphic tee I own. The crest embroidery looks premium.', date: '2026-07-05', status: 'approved' },
+  { productCode: 'p-005', author: 'Sneha Kapoor', rating: 2, comment: 'Fabric felt thinner than expected for the price.', date: '2026-07-04', status: 'pending' },
+  { productCode: 'p-006', author: 'Vikram Singh', rating: 1, comment: 'This looks nothing like the pictures, total waste of money.', date: '2026-06-30', status: 'rejected' },
+  { productCode: 'p-008', author: 'Karan Malhotra', rating: 5, comment: 'Great everyday tee, holds up well after multiple washes.', date: '2026-07-03', status: 'approved' },
+  { productCode: 'p-003', author: 'Neha Joshi', rating: 4, comment: 'Simple, clean, exactly what I needed for daily wear.', date: '2026-07-01', status: 'approved' },
+  { productCode: 'p-007', author: 'Ananya Iyer', rating: 3, comment: 'Sleeves run a bit long for my height, otherwise decent.', date: '2026-07-08', status: 'pending' },
+];
+
+export const SEED_BANNERS = [
+  { title: 'Monsoon Sale — Up to 40% Off', imageUrl: bannerShot('MONSOON SALE', '7a0f0f'), link: '/t-shirts?sortBy=price-asc', position: 'homepage-hero', order: 1, status: 'active', startDate: '2026-07-01', endDate: '2026-07-31' },
+  { title: 'New Arrivals — Graphic Collection', imageUrl: bannerShot('NEW ARRIVALS', '0a0a0a'), link: '/t-shirts?category=Graphic', position: 'homepage-hero', order: 2, status: 'active' },
+  { title: 'Free Shipping Over ₹2000', imageUrl: bannerShot('FREE SHIPPING', '2b2b2b'), position: 'homepage-promo', order: 1, status: 'active' },
+  { title: 'Oversized Fits Spotlight', imageUrl: bannerShot('OVERSIZED FITS', '1a1a1a'), link: '/t-shirts?category=Oversized', position: 'category-top', order: 1, status: 'inactive' },
+];
+
+export const SEED_CMS_PAGES = [
+  { title: 'About Us', slug: 'about-us', content: 'Dressing Life is a streetwear-first label built on premium cotton basics and bold graphic tees...', status: 'published', updatedAt: new Date('2026-06-20') },
+  { title: 'Shipping & Returns', slug: 'shipping-returns', content: 'We ship pan-India in 3-5 business days. Returns are accepted within 14 days of delivery...', status: 'published', updatedAt: new Date('2026-05-14') },
+  { title: 'Privacy Policy', slug: 'privacy-policy', content: 'This policy describes how we collect, use, and protect your personal information...', status: 'published', updatedAt: new Date('2026-03-02') },
+  { title: 'Size Guide', slug: 'size-guide', content: 'Draft content for an upcoming interactive size guide page...', status: 'draft', updatedAt: new Date('2026-07-01') },
+];
+
+export const SEED_BLOG_POSTS = [
+  { title: 'How to Style a Graphic Tee for Every Season', slug: 'style-graphic-tee-every-season', excerpt: 'From layering in winter to breathable fits in summer, here is how to make your graphic tee work year-round.', content: 'Full article body goes here...', author: 'Farah Nadeem', coverImage: cover('STYLE GUIDE'), status: 'published', tags: ['style', 'graphic-tees'], publishedAt: '2026-06-25' },
+  { title: 'The Story Behind Our 240 GSM Cotton', slug: 'story-behind-240-gsm-cotton', excerpt: 'Why we chose heavyweight cotton for our bestsellers, and what it means for durability.', content: 'Full article body goes here...', author: 'Devansh Oberoi', coverImage: cover('OUR FABRIC'), status: 'published', tags: ['fabric', 'sustainability'], publishedAt: '2026-05-30' },
+  { title: 'Oversized vs Regular Fit: Which Should You Buy?', slug: 'oversized-vs-regular-fit', excerpt: 'A quick breakdown of our two most popular fits to help you pick the right one.', content: 'Draft article body goes here...', author: 'Farah Nadeem', coverImage: cover('FIT GUIDE'), status: 'draft', tags: ['fit-guide'], publishedAt: '2026-07-10' },
+];
+
+export const SEED_NOTIFICATIONS = [
+  { type: 'order', title: 'New order placed', message: 'Ananya Iyer placed order worth ₹3,297.', isRead: false, createdAt: '2026-07-08T09:15:00' },
+  { type: 'inventory', title: 'Low stock alert', message: 'Full Sleeve Raider Tee has only 18 units left in stock.', isRead: false, createdAt: '2026-07-08T07:40:00' },
+  { type: 'review', title: 'New review awaiting moderation', message: 'Ananya Iyer left a 3-star review on Full Sleeve Raider Tee.', isRead: false, createdAt: '2026-07-08T06:05:00' },
+  { type: 'order', title: 'Order cancelled', message: 'Priya Sharma cancelled a recent order.', isRead: true, createdAt: '2026-06-22T14:22:00' },
+  { type: 'system', title: 'Coupon expiring soon', message: 'Coupon FLAT200 expires on 2026-08-31.', isRead: true, createdAt: '2026-07-01T10:00:00' },
+  { type: 'inventory', title: 'Low stock alert', message: 'Red Line Henley Tee has only 20 units left in stock.', isRead: true, createdAt: '2026-06-29T11:30:00' },
+];
+
+export const SEED_PERMISSIONS = [
+  { key: 'dashboard.view', label: 'View dashboard', group: 'Dashboard' },
+  { key: 'products.view', label: 'View products', group: 'Catalog' },
+  { key: 'products.manage', label: 'Create / edit / delete products', group: 'Catalog' },
+  { key: 'categories.manage', label: 'Manage categories', group: 'Catalog' },
+  { key: 'inventory.manage', label: 'Adjust stock levels', group: 'Catalog' },
+  { key: 'orders.view', label: 'View orders', group: 'Sales' },
+  { key: 'orders.manage', label: 'Update order status', group: 'Sales' },
+  { key: 'coupons.manage', label: 'Manage coupons', group: 'Sales' },
+  { key: 'customers.view', label: 'View customers', group: 'People' },
+  { key: 'users.manage', label: 'Manage admin users', group: 'People' },
+  { key: 'reviews.moderate', label: 'Moderate reviews', group: 'People' },
+  { key: 'banners.manage', label: 'Manage banners', group: 'Content' },
+  { key: 'cms.manage', label: 'Manage pages & blogs', group: 'Content' },
+  { key: 'reports.view', label: 'View reports & analytics', group: 'System' },
+  { key: 'roles.manage', label: 'Manage roles & permissions', group: 'System' },
+  { key: 'settings.manage', label: 'Manage store settings', group: 'System' },
+];
+
+export const SEED_ROLES = [
+  { name: 'Admin', description: 'Full access to every module.', permissions: SEED_PERMISSIONS.map((p) => p.key), usersCount: 1 },
+  {
+    name: 'Manager',
+    description: 'Manages catalog, orders, and content, without user/role administration.',
+    permissions: ['dashboard.view', 'products.view', 'products.manage', 'categories.manage', 'inventory.manage', 'orders.view', 'orders.manage', 'coupons.manage', 'customers.view', 'reviews.moderate', 'banners.manage', 'cms.manage', 'reports.view'],
+    usersCount: 2,
+  },
+  {
+    name: 'Support',
+    description: 'Customer-facing operations: orders, customers, and reviews.',
+    permissions: ['dashboard.view', 'orders.view', 'customers.view', 'reviews.moderate'],
+    usersCount: 2,
+  },
+];
+
+export const SEED_SETTINGS = {
+  storeName: 'Dressing Life',
+  supportEmail: 'support@dressinglife.com',
+  supportPhone: '+91 1800 123 4567',
+  currency: 'INR',
+  taxRatePct: 12,
+  flatShippingFee: 99,
+  freeShippingThreshold: 2000,
+  logoUrl: '',
+  socialLinks: {
+    instagram: 'https://instagram.com/dressinglife',
+    facebook: 'https://facebook.com/dressinglife',
+    twitter: 'https://twitter.com/dressinglife',
+  },
+};

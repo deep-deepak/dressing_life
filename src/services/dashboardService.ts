@@ -1,21 +1,22 @@
 import type { AdminOrder, CategoryBreakdown, DashboardStats, SalesPoint } from '@/types';
-import { CATEGORY_BREAKDOWN, DASHBOARD_STATS, SALES_TREND } from './mock/admin/dashboard.data';
-import { ADMIN_ORDERS } from './mock/admin/orders.data';
-import { simulateDelay } from './simulateDelay';
+import { api } from './api';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  return simulateDelay(DASHBOARD_STATS);
+  const { data } = await api.get<DashboardStats>('/dashboard/stats');
+  return data;
 }
 
 export async function getSalesTrend(): Promise<SalesPoint[]> {
-  return simulateDelay(SALES_TREND);
+  const { data } = await api.get<SalesPoint[]>('/dashboard/sales-trend');
+  return data;
 }
 
 export async function getCategoryBreakdown(): Promise<CategoryBreakdown[]> {
-  return simulateDelay(CATEGORY_BREAKDOWN);
+  const { data } = await api.get<CategoryBreakdown[]>('/dashboard/category-breakdown');
+  return data;
 }
 
 export async function getRecentOrders(limit = 5): Promise<AdminOrder[]> {
-  const sorted = [...ADMIN_ORDERS].sort((a, b) => b.placedAt.localeCompare(a.placedAt));
-  return simulateDelay(sorted.slice(0, limit));
+  const { data } = await api.get<AdminOrder[]>('/dashboard/recent-orders', { params: { limit } });
+  return data;
 }

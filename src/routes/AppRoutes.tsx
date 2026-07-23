@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { MainLayout, AuthLayout, AdminLayout } from '@/layouts';
 import { ROUTES, ADMIN_ROUTES } from '@/constants/routes';
 import { RequireAdminAuth } from './RequireAdminAuth';
+import { RequireAuth } from './RequireAuth';
 import HomePage from '@/pages/Home';
 import TShirtsPage from '@/pages/TShirts';
 import ProductDetailsPage from '@/pages/ProductDetails';
@@ -42,7 +43,14 @@ const router = createBrowserRouter([
       { path: ROUTES.CONTACT, element: <ContactUsPage /> },
       { path: ROUTES.CART, element: <CartPage /> },
       { path: ROUTES.WISHLIST, element: <WishlistPage /> },
-      { path: ROUTES.PROFILE, element: <MyProfilePage /> },
+      {
+        path: ROUTES.PROFILE,
+        element: (
+          <RequireAuth>
+            <MyProfilePage />
+          </RequireAuth>
+        ),
+      },
       { path: ROUTES.NOT_FOUND, element: <NotFoundPage /> },
     ],
   },

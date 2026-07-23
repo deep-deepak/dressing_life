@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Plus, Search, SquarePen, Trash2 } from 'lucide-react';
 import type { Product } from '@/types';
-import { createProduct, deleteProduct, getProducts, updateProduct, type ProductPayload } from '@/services';
-import { CATEGORIES } from '@/services/mock/products.data';
+import { createProduct, deleteProduct, getCategories, getProducts, updateProduct, type ProductPayload } from '@/services';
 import { useAsync, useDisclosure, usePagination } from '@/hooks';
 import { Badge, Button, ConfirmDialog, Input, Pagination, Select, Table, type TableColumn } from '@/components/ui';
 import { PageHeader } from '@/components/admin';
@@ -20,6 +19,7 @@ export default function AdminProductsPage() {
   const [category, setCategory] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
   const { data: products, isLoading, error } = useAsync(() => getProducts(), [reloadKey]);
+  const { data: categories } = useAsync(() => getCategories(), []);
 
   const formModal = useDisclosure();
   const deleteDialog = useDisclosure();
@@ -130,7 +130,7 @@ export default function AdminProductsPage() {
         </div>
         <Select
           placeholder="All categories"
-          options={CATEGORIES.map((c) => ({ value: c, label: c }))}
+          options={(categories ?? []).map((c) => ({ value: c, label: c }))}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="sm:w-52"

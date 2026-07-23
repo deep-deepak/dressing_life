@@ -1,0 +1,18 @@
+export const PERMISSIONS = [
+  { key: 'dashboard.view', label: 'View dashboard', group: 'Dashboard' },
+  { key: 'products.view', label: 'View products', group: 'Catalog' },
+  { key: 'products.manage', label: 'Create / edit / delete products', group: 'Catalog' },
+  { key: 'categories.manage', label: 'Manage categories', group: 'Catalog' },
+  { key: 'inventory.manage', label: 'Adjust stock levels', group: 'Catalog' },
+  { key: 'orders.view', label: 'View orders', group: 'Sales' },
+  { key: 'orders.manage', label: 'Update order status', group: 'Sales' },
+  { key: 'coupons.manage', label: 'Manage coupons', group: 'Sales' },
+  { key: 'customers.view', label: 'View customers', group: 'People' },
+  { key: 'users.manage', label: 'Manage admin users', group: 'People' },
+  { key: 'reviews.moderate', label: 'Moderate reviews', group: 'People' },
+  { key: 'banners.manage', label: 'Manage banners', group: 'Content' },
+  { key: 'cms.manage', label: 'Manage pages & blogs', group: 'Content' },
+  { key: 'reports.view', label: 'View reports & analytics', group: 'System' },
+  { key: 'roles.manage', label: 'Manage roles & permissions', group: 'System' },
+  { key: 'settings.manage', label: 'Manage store settings', group: 'System' },
+];

@@ -1,20 +1,16 @@
 import type { AdminReview, ReviewStatus } from '@/types';
-import { ADMIN_REVIEWS } from '../mock/admin/reviews.data';
-import { simulateDelay } from '../simulateDelay';
+import { api } from '../api';
 
 export async function getAdminReviews(): Promise<AdminReview[]> {
-  return simulateDelay([...ADMIN_REVIEWS]);
+  const { data } = await api.get<AdminReview[]>('/reviews');
+  return data;
 }
 
 export async function moderateReview(id: string, status: ReviewStatus): Promise<AdminReview> {
-  const index = ADMIN_REVIEWS.findIndex((r) => r.id === id);
-  if (index === -1) throw new Error('Review not found.');
-  ADMIN_REVIEWS[index] = { ...ADMIN_REVIEWS[index], status };
-  return simulateDelay(ADMIN_REVIEWS[index]);
+  const { data } = await api.patch<AdminReview>(`/reviews/${id}/status`, { status });
+  return data;
 }
 
 export async function deleteReview(id: string): Promise<void> {
-  const index = ADMIN_REVIEWS.findIndex((r) => r.id === id);
-  if (index !== -1) ADMIN_REVIEWS.splice(index, 1);
-  return simulateDelay(undefined);
+  await api.delete(`/reviews/${id}`);
 }

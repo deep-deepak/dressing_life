@@ -21,8 +21,8 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginPayload) => {
     try {
       setFormError(undefined);
-      const user = await login(values);
-      setUser(user);
+      const { user, token } = await login(values);
+      setUser(user, token);
       navigate(ROUTES.PROFILE);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Something went wrong.');

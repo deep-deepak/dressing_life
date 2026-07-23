@@ -2,6 +2,7 @@ export * from './api';
 export * from './productService';
 export * from './authService';
 export * from './contactService';
+export * from './orderService';
 export * from './mock/testimonials.data';
 export * from './adminAuthService';
 export * from './dashboardService';

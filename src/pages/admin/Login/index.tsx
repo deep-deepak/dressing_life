@@ -26,8 +26,8 @@ export default function AdminLoginPage() {
   const onSubmit = async (values: AdminLoginValues) => {
     try {
       setFormError(undefined);
-      const user = await loginAdmin(values);
-      setUser(user);
+      const { user, token } = await loginAdmin(values);
+      setUser(user, token);
       navigate(ADMIN_ROUTES.DASHBOARD);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Something went wrong.');

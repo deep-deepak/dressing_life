@@ -1,23 +1,12 @@
 import type { User } from '@/types';
-import { simulateDelay } from './simulateDelay';
+import { api } from './api';
 
-// Mock credential — swap for a real `api.post('/admin/login', ...)` call once the auth API is available.
-const MOCK_ADMIN_CREDENTIAL = { email: 'admin@dressinglife.com', password: 'admin123' };
+interface AuthResponse {
+  user: User;
+  token: string;
+}
 
-export async function loginAdmin(payload: { email: string; password: string }): Promise<User> {
-  if (payload.email !== MOCK_ADMIN_CREDENTIAL.email || payload.password !== MOCK_ADMIN_CREDENTIAL.password) {
-    throw new Error('Invalid admin email or password.');
-  }
-
-  const adminUser: User = {
-    id: 'au-001',
-    firstName: 'Martin',
-    lastName: 'Sequeira',
-    email: payload.email,
-    addresses: [],
-    orders: [],
-    role: 'admin',
-  };
-
-  return simulateDelay(adminUser, 500);
+export async function loginAdmin(payload: { email: string; password: string }): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>('/admin/auth/login', payload);
+  return data;
 }

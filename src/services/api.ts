@@ -18,5 +18,11 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error),
+  (error) => {
+    const message = error?.response?.data?.message;
+    if (message) {
+      return Promise.reject(new Error(message));
+    }
+    return Promise.reject(error);
+  },
 );

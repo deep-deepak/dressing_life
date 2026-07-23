@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { LogOut, MapPin, Package, User as UserIcon } from 'lucide-react';
-import { getCurrentUser } from '@/services';
 import { useAuthStore } from '@/store';
+import { useAsync } from '@/hooks';
+import { getMyOrders } from '@/services/orderService';
 import { formatCurrency } from '@/utils';
 import { cn } from '@/utils';
 import { Container, PageLoader } from '@/components/ui';
@@ -16,14 +17,9 @@ const TABS: { id: Tab; label: string; icon: typeof UserIcon }[] = [
 ];
 
 export default function MyProfilePage() {
-  const { user, isAuthenticated, setUser, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [activeTab, setActiveTab] = useState<Tab>('profile');
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      getCurrentUser().then(setUser);
-    }
-  }, [isAuthenticated, setUser]);
+  const { data: orders, isLoading: ordersLoading } = useAsync(() => getMyOrders(), []);
 
   if (!user) return <PageLoader />;
 
@@ -94,11 +90,13 @@ export default function MyProfilePage() {
           {activeTab === 'orders' && (
             <div className="flex flex-col gap-4">
               <h2 className="font-display text-lg uppercase tracking-wide">Order History</h2>
-              {user.orders.length === 0 ? (
+              {ordersLoading ? (
+                <PageLoader />
+              ) : !orders || orders.length === 0 ? (
                 <p className="text-sm text-brand-gray-500">You haven't placed any orders yet.</p>
               ) : (
                 <div className="flex flex-col divide-y divide-brand-gray-200">
-                  {user.orders.map((order) => (
+                  {orders.map((order) => (
                     <div key={order.id} className="flex flex-col gap-2 py-4">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{order.id}</span>

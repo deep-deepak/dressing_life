@@ -1,30 +1,21 @@
 import type { AdminUser, AdminUserPayload } from '@/types';
-import { ADMIN_USERS } from '../mock/admin/adminUsers.data';
-import { simulateDelay } from '../simulateDelay';
+import { api } from '../api';
 
 export async function getAdminUsers(): Promise<AdminUser[]> {
-  return simulateDelay([...ADMIN_USERS]);
+  const { data } = await api.get<AdminUser[]>('/admin-users');
+  return data;
 }
 
 export async function createAdminUser(payload: AdminUserPayload): Promise<AdminUser> {
-  const newUser: AdminUser = {
-    id: `au-${crypto.randomUUID().slice(0, 8)}`,
-    ...payload,
-    createdAt: new Date().toISOString().slice(0, 10),
-  };
-  ADMIN_USERS.unshift(newUser);
-  return simulateDelay(newUser);
+  const { data } = await api.post<AdminUser>('/admin-users', payload);
+  return data;
 }
 
 export async function updateAdminUser(id: string, payload: AdminUserPayload): Promise<AdminUser> {
-  const index = ADMIN_USERS.findIndex((u) => u.id === id);
-  if (index === -1) throw new Error('Admin user not found.');
-  ADMIN_USERS[index] = { ...ADMIN_USERS[index], ...payload };
-  return simulateDelay(ADMIN_USERS[index]);
+  const { data } = await api.put<AdminUser>(`/admin-users/${id}`, payload);
+  return data;
 }
 
 export async function deleteAdminUser(id: string): Promise<void> {
-  const index = ADMIN_USERS.findIndex((u) => u.id === id);
-  if (index !== -1) ADMIN_USERS.splice(index, 1);
-  return simulateDelay(undefined);
+  await api.delete(`/admin-users/${id}`);
 }

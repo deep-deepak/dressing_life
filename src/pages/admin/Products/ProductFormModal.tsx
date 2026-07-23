@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type { Product } from '@/types';
-import type { ProductPayload } from '@/services';
+import { getCategories, type ProductPayload } from '@/services';
 import { Modal, Button, Input, Textarea, Select } from '@/components/ui';
-import { CATEGORIES } from '@/services/mock/products.data';
+import { useAsync } from '@/hooks';
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -13,6 +13,7 @@ interface ProductFormModalProps {
 }
 
 export function ProductFormModal({ isOpen, onClose, onSubmit, product }: ProductFormModalProps) {
+  const { data: categories } = useAsync(() => getCategories(), []);
   const {
     register,
     handleSubmit,
@@ -71,7 +72,7 @@ export function ProductFormModal({ isOpen, onClose, onSubmit, product }: Product
         <Select
           label="Category"
           placeholder="Select category"
-          options={CATEGORIES.map((c) => ({ value: c, label: c }))}
+          options={(categories ?? []).map((c) => ({ value: c, label: c }))}
           error={errors.category?.message}
           {...register('category', { required: 'Category is required' })}
         />

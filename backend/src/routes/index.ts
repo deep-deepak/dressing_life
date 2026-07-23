@@ -1,0 +1,42 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes.js';
+import adminAuthRoutes from './adminAuth.routes.js';
+import productRoutes from './products.routes.js';
+import categoryRoutes from './categories.routes.js';
+import orderRoutes from './orders.routes.js';
+import customerRoutes from './customers.routes.js';
+import adminUserRoutes from './adminUsers.routes.js';
+import inventoryRoutes from './inventory.routes.js';
+import couponRoutes from './coupons.routes.js';
+import reviewRoutes from './reviews.routes.js';
+import bannerRoutes from './banners.routes.js';
+import cmsRoutes from './cms.routes.js';
+import notificationRoutes from './notifications.routes.js';
+import roleRoutes from './roles.routes.js';
+import settingsRoutes from './settings.routes.js';
+import dashboardRoutes from './dashboard.routes.js';
+import reportRoutes from './reports.routes.js';
+import contactRoutes from './contact.routes.js';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/admin/auth', adminAuthRoutes);
+router.use('/products', productRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/orders', orderRoutes);
+router.use('/customers', customerRoutes);
+router.use('/admin-users', adminUserRoutes);
+router.use('/inventory', inventoryRoutes);
+router.use('/coupons', couponRoutes);
+router.use('/reviews', reviewRoutes);
+router.use('/banners', bannerRoutes);
+router.use('/cms', cmsRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/roles', roleRoutes);
+router.use('/settings', settingsRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/reports', reportRoutes);
+router.use('/contact', contactRoutes);
+
+export default router;

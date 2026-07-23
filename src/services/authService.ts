@@ -1,27 +1,22 @@
 import type { LoginPayload, RegisterPayload, User } from '@/types';
-import { MOCK_USER } from './mock/user.data';
-import { simulateDelay } from './simulateDelay';
+import { api } from './api';
 
-export async function login(payload: LoginPayload): Promise<User> {
-  if (!payload.email || !payload.password) {
-    throw new Error('Email and password are required.');
-  }
-  return simulateDelay({ ...MOCK_USER, email: payload.email }, 500);
+interface AuthResponse {
+  user: User;
+  token: string;
 }
 
-export async function register(payload: RegisterPayload): Promise<User> {
-  return simulateDelay(
-    {
-      ...MOCK_USER,
-      firstName: payload.firstName,
-      lastName: payload.lastName,
-      email: payload.email,
-      orders: [],
-    },
-    500,
-  );
+export async function login(payload: LoginPayload): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>('/auth/login', payload);
+  return data;
+}
+
+export async function register(payload: RegisterPayload): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>('/auth/register', payload);
+  return data;
 }
 
 export async function getCurrentUser(): Promise<User> {
-  return simulateDelay(MOCK_USER);
+  const { data } = await api.get<User>('/auth/me');
+  return data;
 }

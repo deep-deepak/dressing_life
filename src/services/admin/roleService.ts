@@ -1,30 +1,26 @@
 import type { Permission, Role, RolePayload } from '@/types';
-import { ADMIN_ROLES, PERMISSIONS } from '../mock/admin/roles.data';
-import { simulateDelay } from '../simulateDelay';
+import { api } from '../api';
 
 export async function getRoles(): Promise<Role[]> {
-  return simulateDelay([...ADMIN_ROLES]);
+  const { data } = await api.get<Role[]>('/roles');
+  return data;
 }
 
 export async function getPermissions(): Promise<Permission[]> {
-  return simulateDelay([...PERMISSIONS]);
+  const { data } = await api.get<Permission[]>('/roles/permissions');
+  return data;
 }
 
 export async function createRole(payload: RolePayload): Promise<Role> {
-  const newRole: Role = { id: `rl-${crypto.randomUUID().slice(0, 8)}`, usersCount: 0, ...payload };
-  ADMIN_ROLES.push(newRole);
-  return simulateDelay(newRole);
+  const { data } = await api.post<Role>('/roles', payload);
+  return data;
 }
 
 export async function updateRole(id: string, payload: RolePayload): Promise<Role> {
-  const index = ADMIN_ROLES.findIndex((r) => r.id === id);
-  if (index === -1) throw new Error('Role not found.');
-  ADMIN_ROLES[index] = { ...ADMIN_ROLES[index], ...payload };
-  return simulateDelay(ADMIN_ROLES[index]);
+  const { data } = await api.put<Role>(`/roles/${id}`, payload);
+  return data;
 }
 
 export async function deleteRole(id: string): Promise<void> {
-  const index = ADMIN_ROLES.findIndex((r) => r.id === id);
-  if (index !== -1) ADMIN_ROLES.splice(index, 1);
-  return simulateDelay(undefined);
+  await api.delete(`/roles/${id}`);
 }

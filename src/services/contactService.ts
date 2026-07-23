@@ -1,9 +1,7 @@
 import type { ContactFormValues } from '@/types';
-import { simulateDelay } from './simulateDelay';
+import { api } from './api';
 
 export async function submitContactForm(values: ContactFormValues): Promise<{ success: boolean }> {
-  if (!values.email || !values.message) {
-    throw new Error('Email and message are required.');
-  }
-  return simulateDelay({ success: true }, 600);
+  const { data } = await api.post<{ success: boolean }>('/contact', values);
+  return data;
 }

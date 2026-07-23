@@ -21,8 +21,8 @@ export default function RegisterPage() {
   const onSubmit = async (values: RegisterPayload) => {
     try {
       setFormError(undefined);
-      const user = await registerUser(values);
-      setUser(user);
+      const { user, token } = await registerUser(values);
+      setUser(user, token);
       navigate(ROUTES.PROFILE);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Something went wrong.');

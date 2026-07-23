@@ -38,8 +38,7 @@ export interface User {
   phone?: string;
   avatarUrl?: string;
   addresses: Address[];
-  orders: Order[];
-  role?: 'admin' | 'customer';
+  role?: 'admin' | 'manager' | 'support' | 'customer';
 }
 
 export interface LoginPayload {

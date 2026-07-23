@@ -6,7 +6,8 @@ import { useAuthStore } from '@/store';
 export function RequireAdminAuth({ children }: { children: ReactNode }) {
   const user = useAuthStore((state) => state.user);
 
-  if (user?.role !== 'admin') {
+  const isStaff = user?.role === 'admin' || user?.role === 'manager' || user?.role === 'support';
+  if (!isStaff) {
     return <Navigate to={ADMIN_ROUTES.LOGIN} replace />;
   }
 
