@@ -1,30 +1,13 @@
 import { Router } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { requireAuth, requireRole, STAFF_ROLES } from '../middleware/auth.js';
-import { computeCategoryBreakdown, computeCustomerGrowth, computeSalesTrend } from '../utils/analytics.js';
+import { getCategoryReport, getCustomerGrowth, getSalesReport } from '../controllers/reportController.js';
 
 const router = Router();
 router.use(requireAuth, requireRole(...STAFF_ROLES));
 
-router.get(
-  '/sales',
-  asyncHandler(async (_req, res) => {
-    res.json(await computeSalesTrend());
-  }),
-);
-
-router.get(
-  '/category',
-  asyncHandler(async (_req, res) => {
-    res.json(await computeCategoryBreakdown());
-  }),
-);
-
-router.get(
-  '/customer-growth',
-  asyncHandler(async (_req, res) => {
-    res.json(await computeCustomerGrowth());
-  }),
-);
+router.get('/sales', asyncHandler(getSalesReport));
+router.get('/category', asyncHandler(getCategoryReport));
+router.get('/customer-growth', asyncHandler(getCustomerGrowth));
 
 export default router;
