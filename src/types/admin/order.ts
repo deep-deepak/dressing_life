@@ -1,6 +1,4 @@
-import type { OrderItem, OrderStatus } from '@/types/user';
-
-export type PaymentStatus = 'paid' | 'pending' | 'refunded' | 'failed';
+import type { OrderItem, OrderStatus, PaymentStatus } from '@/types/order';
 
 export interface AdminOrder {
   id: string;
@@ -17,4 +15,4 @@ export interface AdminOrder {
   shippingAddress: string;
 }
 
-export type { OrderStatus };
+export type { OrderStatus, PaymentStatus };

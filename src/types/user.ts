@@ -10,26 +10,6 @@ export interface Address {
   isDefault?: boolean;
 }
 
-export interface OrderItem {
-  productId: string;
-  name: string;
-  image: string;
-  size: string;
-  color: string;
-  quantity: number;
-  price: number;
-}
-
-export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
-
-export interface Order {
-  id: string;
-  placedAt: string;
-  status: OrderStatus;
-  items: OrderItem[];
-  total: number;
-}
-
 export interface User {
   id: string;
   firstName: string;

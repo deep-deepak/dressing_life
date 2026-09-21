@@ -10,6 +10,8 @@ import AboutUsPage from '@/pages/AboutUs';
 import ContactUsPage from '@/pages/ContactUs';
 import CartPage from '@/pages/Cart';
 import WishlistPage from '@/pages/Wishlist';
+import CheckoutPage from '@/pages/Checkout';
+import OrderConfirmationPage from '@/pages/OrderConfirmation';
 import LoginPage from '@/pages/Login';
 import RegisterPage from '@/pages/Register';
 import MyProfilePage from '@/pages/MyProfile';
@@ -43,6 +45,22 @@ const router = createBrowserRouter([
       { path: ROUTES.CONTACT, element: <ContactUsPage /> },
       { path: ROUTES.CART, element: <CartPage /> },
       { path: ROUTES.WISHLIST, element: <WishlistPage /> },
+      {
+        path: ROUTES.CHECKOUT,
+        element: (
+          <RequireAuth>
+            <CheckoutPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: ROUTES.ORDER_CONFIRMATION,
+        element: (
+          <RequireAuth>
+            <OrderConfirmationPage />
+          </RequireAuth>
+        ),
+      },
       {
         path: ROUTES.PROFILE,
         element: (

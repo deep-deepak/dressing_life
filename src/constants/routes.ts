@@ -6,6 +6,8 @@ export const ROUTES = {
   CONTACT: '/contact-us',
   CART: '/cart',
   WISHLIST: '/wishlist',
+  CHECKOUT: '/checkout',
+  ORDER_CONFIRMATION: '/order-confirmation/:id',
   LOGIN: '/login',
   REGISTER: '/register',
   PROFILE: '/my-profile',
@@ -13,6 +15,7 @@ export const ROUTES = {
 } as const;
 
 export const productDetailsPath = (slug: string) => `/t-shirts/${slug}`;
+export const orderConfirmationPath = (id: string) => `/order-confirmation/${id}`;
 
 export const ADMIN_ROUTES = {
   LOGIN: '/admin/login',

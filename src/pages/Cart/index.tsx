@@ -1,14 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2 } from 'lucide-react';
 import { useCartStore } from '@/store';
 import { ROUTES, productDetailsPath } from '@/constants/routes';
+import { SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/constants/pricing';
 import { formatCurrency } from '@/utils';
 import { Container, EmptyState, QuantitySelector } from '@/components/ui';
 
-const SHIPPING_THRESHOLD = 1999;
-const SHIPPING_FEE = 99;
-
 export default function CartPage() {
+  const navigate = useNavigate();
   const { items, removeItem, updateQuantity, subtotal } = useCartStore();
   const sub = subtotal();
   const shipping = items.length === 0 || sub >= SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
@@ -97,6 +96,7 @@ export default function CartPage() {
           </div>
           <button
             type="button"
+            onClick={() => navigate(ROUTES.CHECKOUT)}
             className="mt-2 h-12 bg-brand-black font-display text-sm uppercase tracking-wider text-brand-white transition-colors hover:bg-brand-red-700"
           >
             Proceed to Checkout
