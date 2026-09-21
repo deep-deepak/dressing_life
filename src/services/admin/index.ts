@@ -6,7 +6,6 @@ export * from './inventoryService';
 export * from './couponService';
 export * from './reviewService';
 export * from './bannerService';
-export * from './cmsService';
 export * from './notificationService';
 export * from './roleService';
 export * from './settingsService';

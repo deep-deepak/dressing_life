@@ -10,7 +10,6 @@ import {
   TicketPercent,
   Star,
   Image,
-  FileText,
   Bell,
   BarChart3,
   ShieldCheck,
@@ -62,10 +61,7 @@ const NAV_GROUPS: NavGroup[] = [
   },
   {
     label: 'Content',
-    items: [
-      { label: 'Banners', path: ADMIN_ROUTES.BANNERS, icon: Image },
-      { label: 'CMS Pages', path: ADMIN_ROUTES.CMS_PAGES, icon: FileText },
-    ],
+    items: [{ label: 'Banners', path: ADMIN_ROUTES.BANNERS, icon: Image }],
   },
   {
     label: 'System',

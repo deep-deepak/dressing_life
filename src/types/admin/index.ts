@@ -7,7 +7,6 @@ export * from './inventory';
 export * from './coupon';
 export * from './review';
 export * from './banner';
-export * from './cms';
 export * from './notification';
 export * from './role';
 export * from './settings';

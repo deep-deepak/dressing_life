@@ -4,7 +4,6 @@ const shot = (label: string, background = '0a0a0a', foreground = 'ffffff') => pl
 const avatar = (label: string) => placeholderImage({ label, width: 200, height: 200, background: '1a1a1a' });
 const catShot = (label: string) => placeholderImage({ label, width: 400, height: 400 });
 const bannerShot = (label: string, background: string) => placeholderImage({ label, width: 1600, height: 600, background });
-const cover = (label: string) => placeholderImage({ label, width: 1200, height: 700, background: '1a1a1a' });
 
 export const SEED_PRODUCTS = [
   {
@@ -238,19 +237,6 @@ export const SEED_BANNERS = [
   { title: 'Oversized Fits Spotlight', imageUrl: bannerShot('OVERSIZED FITS', '1a1a1a'), link: '/t-shirts?category=Oversized', position: 'category-top', order: 1, status: 'inactive' },
 ];
 
-export const SEED_CMS_PAGES = [
-  { title: 'About Us', slug: 'about-us', content: 'Dressing Life is a streetwear-first label built on premium cotton basics and bold graphic tees...', status: 'published', updatedAt: new Date('2026-06-20') },
-  { title: 'Shipping & Returns', slug: 'shipping-returns', content: 'We ship pan-India in 3-5 business days. Returns are accepted within 14 days of delivery...', status: 'published', updatedAt: new Date('2026-05-14') },
-  { title: 'Privacy Policy', slug: 'privacy-policy', content: 'This policy describes how we collect, use, and protect your personal information...', status: 'published', updatedAt: new Date('2026-03-02') },
-  { title: 'Size Guide', slug: 'size-guide', content: 'Draft content for an upcoming interactive size guide page...', status: 'draft', updatedAt: new Date('2026-07-01') },
-];
-
-export const SEED_BLOG_POSTS = [
-  { title: 'How to Style a Graphic Tee for Every Season', slug: 'style-graphic-tee-every-season', excerpt: 'From layering in winter to breathable fits in summer, here is how to make your graphic tee work year-round.', content: 'Full article body goes here...', author: 'Farah Nadeem', coverImage: cover('STYLE GUIDE'), status: 'published', tags: ['style', 'graphic-tees'], publishedAt: '2026-06-25' },
-  { title: 'The Story Behind Our 240 GSM Cotton', slug: 'story-behind-240-gsm-cotton', excerpt: 'Why we chose heavyweight cotton for our bestsellers, and what it means for durability.', content: 'Full article body goes here...', author: 'Devansh Oberoi', coverImage: cover('OUR FABRIC'), status: 'published', tags: ['fabric', 'sustainability'], publishedAt: '2026-05-30' },
-  { title: 'Oversized vs Regular Fit: Which Should You Buy?', slug: 'oversized-vs-regular-fit', excerpt: 'A quick breakdown of our two most popular fits to help you pick the right one.', content: 'Draft article body goes here...', author: 'Farah Nadeem', coverImage: cover('FIT GUIDE'), status: 'draft', tags: ['fit-guide'], publishedAt: '2026-07-10' },
-];
-
 export const SEED_NOTIFICATIONS = [
   { type: 'order', title: 'New order placed', message: 'Ananya Iyer placed order worth ₹3,297.', isRead: false, createdAt: '2026-07-08T09:15:00' },
   { type: 'inventory', title: 'Low stock alert', message: 'Full Sleeve Raider Tee has only 18 units left in stock.', isRead: false, createdAt: '2026-07-08T07:40:00' },
@@ -273,7 +259,6 @@ export const SEED_PERMISSIONS = [
   { key: 'users.manage', label: 'Manage admin users', group: 'People' },
   { key: 'reviews.moderate', label: 'Moderate reviews', group: 'People' },
   { key: 'banners.manage', label: 'Manage banners', group: 'Content' },
-  { key: 'cms.manage', label: 'Manage pages & blogs', group: 'Content' },
   { key: 'reports.view', label: 'View reports & analytics', group: 'System' },
   { key: 'roles.manage', label: 'Manage roles & permissions', group: 'System' },
   { key: 'settings.manage', label: 'Manage store settings', group: 'System' },
@@ -284,7 +269,7 @@ export const SEED_ROLES = [
   {
     name: 'Manager',
     description: 'Manages catalog, orders, and content, without user/role administration.',
-    permissions: ['dashboard.view', 'products.view', 'products.manage', 'categories.manage', 'inventory.manage', 'orders.view', 'orders.manage', 'coupons.manage', 'customers.view', 'reviews.moderate', 'banners.manage', 'cms.manage', 'reports.view'],
+    permissions: ['dashboard.view', 'products.view', 'products.manage', 'categories.manage', 'inventory.manage', 'orders.view', 'orders.manage', 'coupons.manage', 'customers.view', 'reviews.moderate', 'banners.manage', 'reports.view'],
     usersCount: 2,
   },
   {

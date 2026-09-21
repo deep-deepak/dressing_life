@@ -27,8 +27,6 @@ import AdminInventoryPage from '@/pages/admin/Inventory';
 import AdminCouponsPage from '@/pages/admin/Coupons';
 import AdminReviewsPage from '@/pages/admin/Reviews';
 import AdminBannersPage from '@/pages/admin/Banners';
-import AdminCmsPagesPage from '@/pages/admin/Cms/Pages';
-import AdminCmsBlogsPage from '@/pages/admin/Cms/Blogs';
 import AdminNotificationsPage from '@/pages/admin/Notifications';
 import AdminReportsPage from '@/pages/admin/Reports';
 import AdminRolesPage from '@/pages/admin/Roles';
@@ -97,8 +95,6 @@ const router = createBrowserRouter([
       { path: ADMIN_ROUTES.USERS, element: <AdminUsersPage /> },
       { path: ADMIN_ROUTES.REVIEWS, element: <AdminReviewsPage /> },
       { path: ADMIN_ROUTES.BANNERS, element: <AdminBannersPage /> },
-      { path: ADMIN_ROUTES.CMS_PAGES, element: <AdminCmsPagesPage /> },
-      { path: ADMIN_ROUTES.CMS_BLOGS, element: <AdminCmsBlogsPage /> },
       { path: ADMIN_ROUTES.NOTIFICATIONS, element: <AdminNotificationsPage /> },
       { path: ADMIN_ROUTES.REPORTS, element: <AdminReportsPage /> },
       { path: ADMIN_ROUTES.ROLES, element: <AdminRolesPage /> },

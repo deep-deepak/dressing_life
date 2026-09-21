@@ -11,7 +11,6 @@ export const PERMISSIONS = [
   { key: 'users.manage', label: 'Manage admin users', group: 'People' },
   { key: 'reviews.moderate', label: 'Moderate reviews', group: 'People' },
   { key: 'banners.manage', label: 'Manage banners', group: 'Content' },
-  { key: 'cms.manage', label: 'Manage pages & blogs', group: 'Content' },
   { key: 'reports.view', label: 'View reports & analytics', group: 'System' },
   { key: 'roles.manage', label: 'Manage roles & permissions', group: 'System' },
   { key: 'settings.manage', label: 'Manage store settings', group: 'System' },

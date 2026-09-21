@@ -8,16 +8,12 @@ import { Order } from '../models/Order.js';
 import { Coupon } from '../models/Coupon.js';
 import { Review } from '../models/Review.js';
 import { Banner } from '../models/Banner.js';
-import { CmsPage } from '../models/CmsPage.js';
-import { BlogPost } from '../models/BlogPost.js';
 import { Notification } from '../models/Notification.js';
 import { Role } from '../models/Role.js';
 import { Settings } from '../models/Settings.js';
 import {
   SEED_BANNERS,
-  SEED_BLOG_POSTS,
   SEED_CATEGORIES,
-  SEED_CMS_PAGES,
   SEED_COUPONS,
   SEED_CUSTOMERS,
   SEED_NOTIFICATIONS,
@@ -45,8 +41,6 @@ async function seed() {
     Coupon.deleteMany({}),
     Review.deleteMany({}),
     Banner.deleteMany({}),
-    CmsPage.deleteMany({}),
-    BlogPost.deleteMany({}),
     Notification.deleteMany({}),
     Role.deleteMany({}),
     Settings.deleteMany({}),
@@ -109,10 +103,6 @@ async function seed() {
 
   console.log('Seeding banners...');
   await Banner.insertMany(SEED_BANNERS);
-
-  console.log('Seeding CMS pages & blog posts...');
-  await CmsPage.insertMany(SEED_CMS_PAGES);
-  await BlogPost.insertMany(SEED_BLOG_POSTS);
 
   console.log('Seeding notifications...');
   await Notification.insertMany(SEED_NOTIFICATIONS);

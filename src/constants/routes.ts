@@ -31,8 +31,6 @@ export const ADMIN_ROUTES = {
   COUPONS: '/admin/coupons',
   REVIEWS: '/admin/reviews',
   BANNERS: '/admin/banners',
-  CMS_PAGES: '/admin/cms/pages',
-  CMS_BLOGS: '/admin/cms/blogs',
   NOTIFICATIONS: '/admin/notifications',
   REPORTS: '/admin/reports',
   ROLES: '/admin/roles',
