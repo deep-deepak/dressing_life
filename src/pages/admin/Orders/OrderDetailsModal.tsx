@@ -36,6 +36,10 @@ export function OrderDetailsModal({ order, isOpen, onClose, onStatusChange }: Or
             <p className="text-sm text-brand-gray-500">{order.customerEmail}</p>
           </div>
           <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-gray-500">Placed On</p>
+            <p className="text-sm">{new Date(order.createdAt).toLocaleString('en-IN')}</p>
+          </div>
+          <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-gray-500">Shipping Address</p>
             <p className="text-sm">{order.shippingAddress}</p>
           </div>

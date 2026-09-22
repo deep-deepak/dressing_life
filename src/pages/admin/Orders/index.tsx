@@ -54,9 +54,33 @@ export default function AdminOrdersPage() {
         </div>
       ),
     },
-    { key: 'date', header: 'Date', render: (o) => o.placedAt },
+    {
+      key: 'date',
+      header: 'Date',
+      render: (o) => (
+        <div className="flex flex-col">
+          <span>{new Date(o.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+          <span className="text-xs text-brand-gray-500">
+            {new Date(o.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
+      ),
+    },
     { key: 'items', header: 'Items', render: (o) => o.items.reduce((acc, i) => acc + i.quantity, 0) },
     { key: 'total', header: 'Total', render: (o) => formatCurrency(o.total) },
+    {
+      key: 'payment',
+      header: 'Payment',
+      render: (o) =>
+        o.paymentMethod === 'Cash on Delivery' ? (
+          <Badge variant="outline">COD</Badge>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <Badge variant="dark">Prepaid</Badge>
+            <span className="text-xs capitalize text-brand-gray-500">{o.paymentMethod}</span>
+          </div>
+        ),
+    },
     { key: 'status', header: 'Status', render: (o) => <Badge variant={STATUS_VARIANT[o.status]}>{o.status}</Badge> },
     {
       key: 'actions',
