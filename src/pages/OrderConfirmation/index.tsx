@@ -1,14 +1,23 @@
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
-import { useOrderStore } from '@/store';
+import { getOrderById } from '@/services';
+import { useAsync } from '@/hooks';
 import { ROUTES } from '@/constants/routes';
 import { formatCurrency } from '@/utils';
-import { Container, Button, EmptyState } from '@/components/ui';
+import { Container, Button, EmptyState, PageLoader } from '@/components/ui';
 import { OrderStatusBadge } from '@/pages/MyProfile/OrderStatusBadge';
 
 export default function OrderConfirmationPage() {
   const { id } = useParams<{ id: string }>();
-  const order = useOrderStore((s) => s.orders.find((o) => o.id === id));
+  const { data: order, isLoading } = useAsync(() => getOrderById(id!), [id]);
+
+  if (isLoading) {
+    return (
+      <Container className="section-y">
+        <PageLoader />
+      </Container>
+    );
+  }
 
   if (!order) {
     return (

@@ -7,9 +7,13 @@ import {
   listCoupons,
   toggleCouponStatus,
   updateCoupon,
+  validateCoupon,
 } from '../controllers/couponController.js';
 
 const router = Router();
+
+router.post('/validate', requireAuth, asyncHandler(validateCoupon));
+
 router.use(requireAuth, requireRole(...STAFF_ROLES));
 
 router.get('/', asyncHandler(listCoupons));

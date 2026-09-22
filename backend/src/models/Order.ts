@@ -28,9 +28,15 @@ const orderSchema = new Schema(
     shippingFee: { type: Number, required: true },
     total: { type: Number, required: true },
     shippingAddress: { type: String, required: true },
+    couponCode: { type: String },
+    discount: { type: Number, default: 0 },
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
   },
   { timestamps: true },
 );
+
+orderSchema.index({ razorpayOrderId: 1 }, { unique: true, sparse: true });
 
 orderSchema.set('toJSON', toJSONOptions);
 

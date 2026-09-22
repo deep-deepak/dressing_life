@@ -1,44 +1,47 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useCartStore, useAuthStore, useOrderStore } from '@/store';
+import { useCartStore, useAuthStore } from '@/store';
 import { ROUTES, orderConfirmationPath } from '@/constants/routes';
 import { SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/constants/pricing';
-import { validateMockCoupon, type CouponResult } from '@/constants/coupons';
-import { formatCurrency, cn } from '@/utils';
+import {
+  addAddress,
+  validateCoupon,
+  createOrder,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
+  type ValidateCouponResult,
+} from '@/services';
+import { formatCurrency, cn, loadRazorpayScript } from '@/utils';
 import { useDisclosure } from '@/hooks';
-import type { Address, Order, PaymentMethod } from '@/types';
+import type { Address } from '@/types';
 import { Container, Button, Input, Select, Modal, Switch } from '@/components/ui';
 
-const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
-  { value: 'UPI', label: 'UPI' },
-  { value: 'Card', label: 'Card' },
-  { value: 'Cash on Delivery', label: 'Cash on Delivery' },
-  { value: 'Net Banking', label: 'Net Banking' },
+type PaymentOption = 'razorpay' | 'cod';
+
+const PAYMENT_OPTIONS: { value: PaymentOption; label: string }[] = [
+  { value: 'razorpay', label: 'Online Payment (UPI / Card / Net Banking)' },
+  { value: 'cod', label: 'Cash on Delivery' },
 ];
 
 type AddressFormValues = Omit<Address, 'id'>;
-
-function formatAddress(address: Address) {
-  return `${address.line1}${address.line2 ? `, ${address.line2}` : ''}, ${address.city}, ${address.state} ${address.postalCode}`;
-}
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const { items, subtotal, clearCart } = useCartStore();
   const { user, updateUser } = useAuthStore();
-  const addOrder = useOrderStore((s) => s.addOrder);
   const addressModal = useDisclosure();
 
   const addresses = user?.addresses ?? [];
   const [selectedAddressId, setSelectedAddressId] = useState<string | undefined>(
     () => addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id,
   );
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('UPI');
+  const [paymentOption, setPaymentOption] = useState<PaymentOption>('razorpay');
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState<string>();
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<CouponResult>();
+  const [appliedCoupon, setAppliedCoupon] = useState<ValidateCouponResult>();
+  const [addressFormError, setAddressFormError] = useState<string>();
   const [formError, setFormError] = useState<string>();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
@@ -62,22 +65,23 @@ export default function CheckoutPage() {
   const total = sub - discount + shipping;
 
   const onAddAddress = async (values: AddressFormValues) => {
-    if (!user) return;
-    const newAddress: Address = { id: crypto.randomUUID(), ...values };
-    const nextAddresses = values.isDefault
-      ? [...user.addresses.map((a) => ({ ...a, isDefault: false })), newAddress]
-      : [...user.addresses, newAddress];
-    updateUser({ ...user, addresses: nextAddresses });
-    setSelectedAddressId(newAddress.id);
-    reset();
-    addressModal.close();
+    try {
+      setAddressFormError(undefined);
+      const updatedUser = await addAddress(values);
+      updateUser(updatedUser);
+      setSelectedAddressId(updatedUser.addresses.at(-1)?.id);
+      reset();
+      addressModal.close();
+    } catch (err) {
+      setAddressFormError(err instanceof Error ? err.message : 'Something went wrong.');
+    }
   };
 
-  const onApplyCoupon = () => {
+  const onApplyCoupon = async () => {
     try {
       setCouponError(undefined);
       setIsApplyingCoupon(true);
-      setAppliedCoupon(validateMockCoupon(couponCode, sub));
+      setAppliedCoupon(await validateCoupon({ code: couponCode, subtotal: sub }));
     } catch (err) {
       setCouponError(err instanceof Error ? err.message : 'Something went wrong.');
     } finally {
@@ -85,42 +89,67 @@ export default function CheckoutPage() {
     }
   };
 
-  const onPlaceOrder = () => {
-    if (!user || !selectedAddressId) return;
-    const address = addresses.find((a) => a.id === selectedAddressId);
-    if (!address) return;
+  const onPlaceOrder = async () => {
+    if (!selectedAddressId || !user) return;
+    const cartItems = items.map((i) => ({ productId: i.productId, size: i.size, color: i.color, quantity: i.quantity }));
+
+    if (paymentOption === 'cod') {
+      try {
+        setFormError(undefined);
+        setIsPlacingOrder(true);
+        const order = await createOrder({
+          items: cartItems,
+          addressId: selectedAddressId,
+          paymentMethod: 'Cash on Delivery',
+          couponCode: appliedCoupon?.code,
+        });
+        clearCart();
+        navigate(orderConfirmationPath(order.id));
+      } catch (err) {
+        setFormError(err instanceof Error ? err.message : 'Something went wrong.');
+        setIsPlacingOrder(false);
+      }
+      return;
+    }
 
     try {
       setFormError(undefined);
       setIsPlacingOrder(true);
-      const order: Order = {
-        id: crypto.randomUUID(),
-        customerName: `${user.firstName} ${user.lastName}`,
-        customerEmail: user.email,
-        placedAt: new Date().toISOString().slice(0, 10),
-        status: 'processing',
-        paymentStatus: paymentMethod === 'Cash on Delivery' ? 'pending' : 'paid',
-        paymentMethod,
-        items: items.map((i) => ({
-          productId: i.productId,
-          name: i.name,
-          image: i.image,
-          size: i.size,
-          color: i.color,
-          quantity: i.quantity,
-          price: i.price,
-        })),
-        subtotal: sub,
-        shippingFee: shipping,
-        discount,
+      const { razorpayOrderId, amount, currency, keyId } = await createRazorpayOrder({
+        items: cartItems,
+        addressId: selectedAddressId,
         couponCode: appliedCoupon?.code,
-        total,
-        shippingAddress: formatAddress(address),
-      };
-      addOrder(order);
-      clearCart();
-      navigate(orderConfirmationPath(order.id));
-    } finally {
+      });
+      await loadRazorpayScript();
+
+      const razorpay = new window.Razorpay({
+        key: keyId,
+        amount,
+        currency,
+        order_id: razorpayOrderId,
+        name: 'Dressing Life',
+        prefill: { name: `${user.firstName} ${user.lastName}`, email: user.email, contact: user.phone },
+        handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
+          try {
+            const order = await verifyRazorpayPayment(response);
+            clearCart();
+            navigate(orderConfirmationPath(order.id));
+          } catch (err) {
+            setFormError(err instanceof Error ? err.message : 'Payment verification failed.');
+          } finally {
+            setIsPlacingOrder(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsPlacingOrder(false);
+            setFormError('Payment cancelled. Please try again.');
+          },
+        },
+      });
+      razorpay.open();
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Something went wrong.');
       setIsPlacingOrder(false);
     }
   };
@@ -177,10 +206,10 @@ export default function CheckoutPage() {
           <div className="flex flex-col gap-4">
             <h2 className="font-display text-lg uppercase tracking-wide">Payment Method</h2>
             <Select
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-              options={PAYMENT_METHODS}
-              className="max-w-xs"
+              value={paymentOption}
+              onChange={(e) => setPaymentOption(e.target.value as PaymentOption)}
+              options={PAYMENT_OPTIONS}
+              className="max-w-sm"
             />
           </div>
 
@@ -272,6 +301,7 @@ export default function CheckoutPage() {
 
       <Modal isOpen={addressModal.isOpen} onClose={addressModal.close} title="Add New Address">
         <form onSubmit={handleSubmit(onAddAddress)} className="flex flex-col gap-4">
+          {addressFormError && <p className="text-sm text-brand-red-600">{addressFormError}</p>}
           <Input label="Label" placeholder="Home" error={errors.label?.message} {...register('label', { required: 'Label is required' })} />
           <Input label="Address Line 1" error={errors.line1?.message} {...register('line1', { required: 'Address line 1 is required' })} />
           <Input label="Address Line 2 (Optional)" {...register('line2')} />

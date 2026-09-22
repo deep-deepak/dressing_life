@@ -5,6 +5,7 @@ export interface AdminOrder {
   customerName: string;
   customerEmail: string;
   placedAt: string;
+  createdAt: string;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   paymentMethod: string;

@@ -48,3 +48,22 @@ export async function getMe(req: Request, res: Response) {
   delete json.passwordHash;
   res.json(json);
 }
+
+export async function addAddress(req: Request, res: Response) {
+  const { label, line1, line2, city, state, postalCode, country, isDefault } = req.body;
+  if (!label || !line1 || !city || !state || !postalCode || !country) {
+    throw new ApiError(400, 'label, line1, city, state, postalCode, and country are required.');
+  }
+  const user = await User.findById(req.user!.id);
+  if (!user) throw new ApiError(404, 'User not found.');
+  if (isDefault) {
+    user.addresses.forEach((address) => {
+      address.isDefault = false;
+    });
+  }
+  user.addresses.push({ label, line1, line2, city, state, postalCode, country, isDefault: !!isDefault });
+  await user.save();
+  const json = toPlainJSON(user);
+  delete json.passwordHash;
+  res.status(201).json(json);
+}

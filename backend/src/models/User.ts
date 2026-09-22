@@ -1,19 +1,17 @@
 import { Schema, model } from 'mongoose';
 import { toJSONOptions } from '../utils/schemaOptions.js';
 
-const addressSchema = new Schema(
-  {
-    label: { type: String, required: true },
-    line1: { type: String, required: true },
-    line2: String,
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, required: true },
-    isDefault: Boolean,
-  },
-  { _id: false },
-);
+const addressSchema = new Schema({
+  label: { type: String, required: true },
+  line1: { type: String, required: true },
+  line2: String,
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  postalCode: { type: String, required: true },
+  country: { type: String, required: true },
+  isDefault: Boolean,
+});
+addressSchema.set('toJSON', toJSONOptions);
 
 const userSchema = new Schema(
   {

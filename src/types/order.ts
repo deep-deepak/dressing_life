@@ -17,6 +17,7 @@ export interface Order {
   customerName: string;
   customerEmail: string;
   placedAt: string;
+  createdAt: string;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   paymentMethod: string;
@@ -27,4 +28,18 @@ export interface Order {
   couponCode?: string;
   total: number;
   shippingAddress: string;
+}
+
+export interface CreateOrderItemPayload {
+  productId: string;
+  size: string;
+  color: string;
+  quantity: number;
+}
+
+export interface CreateOrderPayload {
+  items: CreateOrderItemPayload[];
+  addressId: string;
+  paymentMethod: PaymentMethod;
+  couponCode?: string;
 }
