@@ -2,6 +2,9 @@ import 'dotenv/config';
 import { connectDB } from '../config/db.js';
 import { Product } from '../models/Product.js';
 
+// Historical one-off script — the local image files and localhost URLs it originally
+// referenced were migrated to Vercel Blob by migrateImagesToBlob.ts. Do not rerun this
+// as-is; it would overwrite the live Blob image URLs with broken localhost ones.
 const PORT = process.env.PORT ?? 4000;
 const BASE_URL = `http://localhost:${PORT}/uploads/products`;
 const img = (file: string) => `${BASE_URL}/${file}`;

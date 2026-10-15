@@ -8,11 +8,12 @@
     "build": "tsc -b",
     "start": "node dist/index.js",
     "seed": "tsx src/seed/seed.ts",
-    "import:products": "tsx src/scripts/importUploadedProducts.ts"
+    "import:products": "tsx src/scripts/importUploadedProducts.ts",
+    "migrate:images": "tsx src/scripts/migrateImagesToBlob.ts"
   },
   "dependencies": {
+    "@vercel/blob": "^2.8.2",
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^2.11.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

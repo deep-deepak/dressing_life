@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { put } from '@vercel/blob';
+import crypto from 'node:crypto';
 import { Product } from '../models/Product.js';
 import { ApiError } from '../utils/asyncHandler.js';
 import { STAFF_ROLES, type AuthTokenPayload } from '../middleware/auth.js';
@@ -94,6 +96,15 @@ export async function deleteProduct(req: Request, res: Response) {
 export async function uploadProductImages(req: Request, res: Response) {
   const files = (req.files as Express.Multer.File[] | undefined) ?? [];
   if (files.length === 0) throw new ApiError(400, 'No image files were uploaded.');
-  const urls = files.map((file) => `${req.protocol}://${req.get('host')}/uploads/products/${file.filename}`);
+
+  const urls = await Promise.all(
+    files.map(async (file) => {
+      const ext = file.originalname.split('.').pop();
+      const filename = `products/${Date.now()}-${crypto.randomUUID()}${ext ? `.${ext}` : ''}`;
+      const blob = await put(filename, file.buffer, { access: 'public', contentType: file.mimetype });
+      return blob.url;
+    }),
+  );
+
   res.status(201).json({ urls });
 }
