@@ -1,4 +1,4 @@
-import type { Product, ProductFilters } from '@/types';
+import type { Product, ProductColor, ProductFilters, ProductSize } from '@/types';
 import { api } from './api';
 
 export async function getProducts(filters: ProductFilters = {}): Promise<Product[]> {
@@ -38,6 +38,18 @@ export interface ProductPayload {
   sku?: string;
   stock: number;
   status?: 'active' | 'draft' | 'archived';
+  images?: string[];
+  colors?: ProductColor[];
+  sizes?: ProductSize[];
+}
+
+export async function uploadProductImages(files: File[]): Promise<string[]> {
+  const formData = new FormData();
+  files.forEach((file) => formData.append('images', file));
+  const { data } = await api.post<{ urls: string[] }>('/products/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return data.urls;
 }
 
 export async function createProduct(payload: ProductPayload): Promise<Product> {

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Plus, Search, SquarePen, Trash2 } from 'lucide-react';
-import type { Product } from '@/types';
+import type { Product, ProductFilters } from '@/types';
 import { createProduct, deleteProduct, getCategories, getProducts, updateProduct, type ProductPayload } from '@/services';
 import { useAsync, useDisclosure, usePagination } from '@/hooks';
 import { Badge, Button, ConfirmDialog, Input, Pagination, Select, Table, type TableColumn } from '@/components/ui';
@@ -17,8 +17,9 @@ const STATUS_VARIANT: Record<NonNullable<Product['status']>, 'dark' | 'red' | 'o
 export default function AdminProductsPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
+  const [status, setStatus] = useState<ProductFilters['status'] | ''>('');
   const [reloadKey, setReloadKey] = useState(0);
-  const { data: products, isLoading, error } = useAsync(() => getProducts(), [reloadKey]);
+  const { data: products, isLoading, error } = useAsync(() => getProducts(status ? { status } : {}), [status, reloadKey]);
   const { data: categories } = useAsync(() => getCategories(), []);
 
   const formModal = useDisclosure();
@@ -134,6 +135,17 @@ export default function AdminProductsPage() {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="sm:w-52"
+        />
+        <Select
+          placeholder="All statuses"
+          options={[
+            { value: 'active', label: 'Active' },
+            { value: 'draft', label: 'Draft' },
+            { value: 'archived', label: 'Archived' },
+          ]}
+          value={status}
+          onChange={(e) => setStatus(e.target.value as ProductFilters['status'] | '')}
+          className="sm:w-44"
         />
       </div>
 

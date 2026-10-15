@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'node:path';
 import express from 'express';
 import cors from 'cors';
 import { connectDB } from './config/db.js';
@@ -11,6 +12,7 @@ const corsOrigins = (process.env.CORS_ORIGIN ?? '').split(',').map((s) => s.trim
 
 app.use(cors({ origin: corsOrigins.length ? corsOrigins : true }));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 app.use('/api', routes);

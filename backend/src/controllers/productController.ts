@@ -1,11 +1,30 @@
 import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { Product } from '../models/Product.js';
 import { ApiError } from '../utils/asyncHandler.js';
+import { STAFF_ROLES, type AuthTokenPayload } from '../middleware/auth.js';
+
+function isStaffRequest(req: Request): boolean {
+  const header = req.headers.authorization;
+  const token = header?.startsWith('Bearer ') ? header.slice(7) : undefined;
+  if (!token) return false;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as AuthTokenPayload;
+    return STAFF_ROLES.includes(payload.role);
+  } catch {
+    return false;
+  }
+}
 
 export async function listProducts(req: Request, res: Response) {
-  const { category, color, size, minPrice, maxPrice, sortBy, search, featured, limit } = req.query as Record<string, string>;
+  const { category, color, size, minPrice, maxPrice, sortBy, search, featured, limit, status } = req.query as Record<string, string>;
   const query: Record<string, unknown> = {};
 
+  if (status) {
+    query.status = status;
+  } else if (!isStaffRequest(req)) {
+    query.status = 'active';
+  }
   if (category) query.category = category;
   if (color) query['colors.name'] = color;
   if (size) query.sizes = size;
@@ -41,6 +60,10 @@ export async function listProducts(req: Request, res: Response) {
 
 export async function getProductBySlug(req: Request, res: Response) {
   const product = await Product.findOne({ slug: req.params.slug });
+  if (product && product.status !== 'active' && !isStaffRequest(req)) {
+    res.json(undefined);
+    return;
+  }
   res.json(product ?? undefined);
 }
 
@@ -66,4 +89,11 @@ export async function updateProduct(req: Request, res: Response) {
 export async function deleteProduct(req: Request, res: Response) {
   await Product.findByIdAndDelete(req.params.id);
   res.status(204).end();
+}
+
+export async function uploadProductImages(req: Request, res: Response) {
+  const files = (req.files as Express.Multer.File[] | undefined) ?? [];
+  if (files.length === 0) throw new ApiError(400, 'No image files were uploaded.');
+  const urls = files.map((file) => `${req.protocol}://${req.get('host')}/uploads/products/${file.filename}`);
+  res.status(201).json({ urls });
 }

@@ -45,4 +45,5 @@ export interface ProductFilters {
   maxPrice?: number;
   sortBy?: 'newest' | 'price-asc' | 'price-desc' | 'rating';
   search?: string;
+  status?: 'active' | 'draft' | 'archived';
 }
