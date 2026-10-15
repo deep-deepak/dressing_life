@@ -19,8 +19,11 @@ import { Container, Button, Input, Select, Modal, Switch } from '@/components/ui
 
 type PaymentOption = 'razorpay' | 'cod';
 
+// Razorpay is still on a test key — hide online payment on the live site until a live key is in place.
+const RAZORPAY_LIVE = false;
+
 const PAYMENT_OPTIONS: { value: PaymentOption; label: string }[] = [
-  { value: 'razorpay', label: 'Online Payment (UPI / Card / Net Banking)' },
+  ...(RAZORPAY_LIVE ? [{ value: 'razorpay' as const, label: 'Online Payment (UPI / Card / Net Banking)' }] : []),
   { value: 'cod', label: 'Cash on Delivery' },
 ];
 
@@ -36,7 +39,7 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | undefined>(
     () => addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id,
   );
-  const [paymentOption, setPaymentOption] = useState<PaymentOption>('razorpay');
+  const [paymentOption, setPaymentOption] = useState<PaymentOption>(RAZORPAY_LIVE ? 'razorpay' : 'cod');
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState<string>();
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);

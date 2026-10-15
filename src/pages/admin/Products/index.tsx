@@ -151,14 +151,66 @@ export default function AdminProductsPage() {
 
       {error && <p className="text-sm text-brand-red-600">{error}</p>}
 
-      <Table
-        columns={columns}
-        data={paginated}
-        rowKey={(p) => p.id}
-        isLoading={isLoading}
-        emptyTitle="No products found"
-        emptyDescription="Try adjusting your search or filters."
-      />
+      <div className="hidden sm:block">
+        <Table
+          columns={columns}
+          data={paginated}
+          rowKey={(p) => p.id}
+          isLoading={isLoading}
+          emptyTitle="No products found"
+          emptyDescription="Try adjusting your search or filters."
+        />
+      </div>
+
+      <div className="flex flex-col gap-3 sm:hidden">
+        {isLoading ? (
+          <div className="flex min-h-[160px] items-center justify-center border border-brand-gray-200 bg-brand-white">
+            <span className="text-sm text-brand-gray-500">Loading…</span>
+          </div>
+        ) : paginated.length === 0 ? (
+          <div className="border border-brand-gray-200 bg-brand-white py-10 text-center text-sm text-brand-gray-500">
+            No products found. Try adjusting your search or filters.
+          </div>
+        ) : (
+          paginated.map((p) => (
+            <div key={p.id} className="flex gap-3 border border-brand-gray-200 bg-brand-white p-3">
+              <img src={p.images[0]} alt={p.name} className="size-16 shrink-0 object-cover" />
+              <div className="flex flex-1 flex-col gap-1">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-medium">{p.name}</p>
+                    <p className="text-xs text-brand-gray-500">{p.sku ?? p.id}</p>
+                  </div>
+                  <div className="flex shrink-0 gap-2">
+                    <button type="button" onClick={() => openEdit(p)} className="text-brand-gray-500 hover:text-brand-black" aria-label={`Edit ${p.name}`}>
+                      <SquarePen size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeletingProduct(p);
+                        deleteDialog.open();
+                      }}
+                      className="text-brand-gray-500 hover:text-brand-red-700"
+                      aria-label={`Delete ${p.name}`}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-brand-gray-500">
+                  <span>{p.category}</span>
+                  <span>{formatCurrency(p.price)}</span>
+                  <span>Stock: {p.stock}</span>
+                </div>
+                <Badge variant={STATUS_VARIANT[p.status ?? 'active']} className="w-fit">
+                  {p.status ?? 'active'}
+                </Badge>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 

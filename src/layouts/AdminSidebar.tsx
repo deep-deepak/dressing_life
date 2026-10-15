@@ -76,52 +76,58 @@ const NAV_GROUPS: NavGroup[] = [
 
 interface AdminSidebarProps {
   collapsed: boolean;
+  onNavigate?: () => void;
 }
 
-export function AdminSidebar({ collapsed }: AdminSidebarProps) {
+export function AdminSidebar({ collapsed, onNavigate }: AdminSidebarProps) {
   return (
-    <aside
-      className={cn(
-        'fixed inset-y-0 left-0 z-40 flex h-full flex-col overflow-y-auto bg-brand-black text-brand-white transition-all duration-200',
-        collapsed ? 'w-[72px]' : 'w-64',
-      )}
-    >
-      <div className="flex h-16 items-center border-b border-white/10 px-5">
-        {collapsed ? (
-          <span className="font-display text-lg tracking-wide">DL</span>
-        ) : (
-          <Logo className="text-brand-white" />
+    <>
+      {!collapsed && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={onNavigate} />}
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col overflow-y-auto bg-brand-black text-brand-white transition-all duration-200',
+          'md:translate-x-0',
+          collapsed ? '-translate-x-full md:w-[72px]' : 'translate-x-0',
         )}
-      </div>
+      >
+        <div className="flex h-16 items-center border-b border-white/10 px-5">
+          {collapsed ? (
+            <span className="font-display text-lg tracking-wide">DL</span>
+          ) : (
+            <Logo className="text-brand-white" />
+          )}
+        </div>
 
-      <nav className="flex-1 px-3 py-4">
-        {NAV_GROUPS.map((group) => (
-          <div key={group.label} className="mb-5">
-            {!collapsed && (
-              <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">{group.label}</p>
-            )}
-            <div className="flex flex-col gap-1">
-              {group.items.map((item) => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    cn(
-                      'flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors',
-                      isActive ? 'bg-brand-red-700 text-brand-white' : 'text-white/70 hover:bg-white/10 hover:text-brand-white',
-                    )
-                  }
-                  title={collapsed ? item.label : undefined}
-                >
-                  <item.icon size={18} className="shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </NavLink>
-              ))}
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label} className="mb-5">
+              {!collapsed && (
+                <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">{group.label}</p>
+              )}
+              <div className="flex flex-col gap-1">
+                {group.items.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    end={item.end}
+                    onClick={onNavigate}
+                    className={({ isActive }) =>
+                      cn(
+                        'flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors',
+                        isActive ? 'bg-brand-red-700 text-brand-white' : 'text-white/70 hover:bg-white/10 hover:text-brand-white',
+                      )
+                    }
+                    title={collapsed ? item.label : undefined}
+                  >
+                    <item.icon size={18} className="shrink-0" />
+                    {!collapsed && <span>{item.label}</span>}
+                  </NavLink>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </nav>
-    </aside>
+          ))}
+        </nav>
+      </aside>
+    </>
   );
 }
