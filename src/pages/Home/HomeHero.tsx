@@ -1,6 +1,66 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES, productDetailsPath } from '@/constants/routes';
+import { getFeaturedProducts } from '@/services';
+import { useAsync } from '@/hooks';
+import { cn } from '@/utils';
+
+const SLIDE_INTERVAL_MS = 3500;
+
+function HeroSlider() {
+  const { data: products } = useAsync(() => getFeaturedProducts(6), []);
+  const [index, setIndex] = useState(0);
+  const slides = products?.filter((p) => p.images[0]) ?? [];
+
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % slides.length), SLIDE_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  if (slides.length === 0) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center border border-brand-charcoal bg-brand-charcoal/40">
+        <span className="font-display text-9xl font-bold text-brand-white/5">DL</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 overflow-hidden border border-brand-charcoal bg-brand-charcoal/40">
+      {slides.map((product, i) => (
+        <Link
+          key={product.id}
+          to={productDetailsPath(product.slug)}
+          className={cn(
+            'absolute inset-0 transition-opacity duration-700 ease-in-out',
+            i === index ? 'opacity-100' : 'pointer-events-none opacity-0',
+          )}
+        >
+          <img src={product.images[0]} alt={product.name} className="size-full object-cover" />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+            <p className="font-display text-sm uppercase tracking-wide text-brand-white">{product.name}</p>
+          </div>
+        </Link>
+      ))}
+
+      {slides.length > 1 && (
+        <div className="absolute bottom-3 right-3 flex gap-1.5">
+          {slides.map((product, i) => (
+            <button
+              key={product.id}
+              type="button"
+              aria-label={`Show slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={cn('h-1.5 rounded-full transition-all', i === index ? 'w-5 bg-brand-white' : 'w-1.5 bg-brand-white/40')}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function HomeHero() {
   return (
@@ -35,10 +95,8 @@ export function HomeHero() {
         </div>
 
         <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
-          <div className="absolute inset-0 flex items-center justify-center border border-brand-charcoal bg-brand-charcoal/40">
-            <span className="font-display text-9xl font-bold text-brand-white/5">DL</span>
-          </div>
-          <div className="absolute inset-6 border border-brand-red-700/40" />
+          <HeroSlider />
+          <div className="pointer-events-none absolute inset-6 border border-brand-red-700/40" />
         </div>
       </div>
     </section>
