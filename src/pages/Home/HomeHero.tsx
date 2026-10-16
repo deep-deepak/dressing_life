@@ -7,6 +7,7 @@ import { useAsync } from '@/hooks';
 import { cn } from '@/utils';
 
 const SLIDE_INTERVAL_MS = 3500;
+const FAN_DEPTH = 4;
 
 function HeroSlider() {
   const { data: products } = useAsync(() => getFeaturedProducts(6), []);
@@ -28,25 +29,36 @@ function HeroSlider() {
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden border border-brand-charcoal bg-brand-charcoal/40">
-      {slides.map((product, i) => (
-        <Link
-          key={product.id}
-          to={productDetailsPath(product.slug)}
-          className={cn(
-            'absolute inset-0 transition-opacity duration-700 ease-in-out',
-            i === index ? 'opacity-100' : 'pointer-events-none opacity-0',
-          )}
-        >
-          <img src={product.images[0]} alt={product.name} className="size-full object-cover" />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-            <p className="font-display text-sm uppercase tracking-wide text-brand-white">{product.name}</p>
-          </div>
-        </Link>
-      ))}
+    <div className="absolute inset-0">
+      {slides.map((product, i) => {
+        const total = slides.length;
+        const depth = (i - index + total) % total;
+        if (depth >= FAN_DEPTH) return null;
+
+        return (
+          <Link
+            key={product.id}
+            to={productDetailsPath(product.slug)}
+            style={{
+              transform: `rotate(${depth * 11}deg) translate(${depth * 14}%, ${depth * 3}%) scale(${1 - depth * 0.05})`,
+              transformOrigin: 'bottom left',
+              zIndex: FAN_DEPTH - depth,
+              opacity: depth === 0 ? 1 : 0.92 - depth * 0.12,
+            }}
+            className="absolute inset-0 overflow-hidden rounded-md border-[6px] border-brand-white shadow-2xl transition-all duration-700 ease-in-out"
+          >
+            <img src={product.images[0]} alt={product.name} className="size-full object-cover" />
+            {depth === 0 && (
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <p className="font-display text-sm uppercase tracking-wide text-brand-white">{product.name}</p>
+              </div>
+            )}
+          </Link>
+        );
+      })}
 
       {slides.length > 1 && (
-        <div className="absolute bottom-3 right-3 flex gap-1.5">
+        <div className="absolute bottom-3 right-3 z-50 flex gap-1.5">
           {slides.map((product, i) => (
             <button
               key={product.id}
@@ -96,7 +108,6 @@ export function HomeHero() {
 
         <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
           <HeroSlider />
-          <div className="pointer-events-none absolute inset-6 border border-brand-red-700/40" />
         </div>
       </div>
     </section>
